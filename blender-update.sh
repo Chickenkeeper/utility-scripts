@@ -15,7 +15,16 @@ if [ ! -f "$1" ]; then
     exit 1
 fi
 
-/opt/blender/blender --unregister-allusers
-rm -rf /opt/blender/*
-tar -xf "$1" -C /opt/blender --strip-components 1
-/opt/blender/blender --register-allusers
+blender_dir=/opt/blender
+
+# if the target directory exists then unregister blender and
+# delete everything in the directory, otherwise create the directory
+if [ -d "$blender_dir" ]; then
+    $blender_dir/blender --unregister-allusers
+    rm -rf $blender_dir/*
+else
+    mkdir $blender_dir
+fi
+
+tar -xf "$1" -C "$blender_dir" --strip-components 1
+$blender_dir/blender --register-allusers
