@@ -1,6 +1,8 @@
 #!/bin/bash
+set -euo pipefail
 
-# make sure libxcrypt-compat is installed
+# NOTE: this needs to be run as root since it needs access to /opt
+# also make sure libxcrypt-compat is installed
 
 if [ "$#" -ne 1 ]; then
     echo "error: missing run file"
@@ -13,5 +15,5 @@ if [ ! -f "$1" ]; then
     exit 1
 fi
 
-SKIP_PACKAGE_CHECK=1 "$1" -i \
-&& rm /opt/resolve/libs/libglib-* /opt/resolve/libs/libgio-* /opt/resolve/libs/libgmodule-* /opt/resolve/libs/libgobject-*
+SKIP_PACKAGE_CHECK=1 "$1" -i
+rm /opt/resolve/libs/libglib-* /opt/resolve/libs/libgio-* /opt/resolve/libs/libgmodule-* /opt/resolve/libs/libgobject-*

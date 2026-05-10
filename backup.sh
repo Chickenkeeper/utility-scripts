@@ -1,6 +1,7 @@
 #!/bin/bash
+set -euo pipefail
 
-# NOTE: this needs to be run as root
+# NOTE: this should be run as root if it needs access to system files
 
 # validate parameters
 if [ "$#" -ne 2 ]; then
