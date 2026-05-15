@@ -12,3 +12,5 @@ Scripts:
 | `kde-powerdevil-restart` | restarts KDE PowerDevil in case it breaks when a monitor is reconnected |
 | `odin-lang-install` | installs/updates the Odin programming language from a file |
 | `ols-install` | installs/updates the Odin Language Server |
+| `tinymist-install` | installs/updates the Tinymist language server for Typst |
+| `typst-install` | installs/updates the Typst typsetting system |
