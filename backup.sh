@@ -1,8 +1,6 @@
 #!/bin/bash
 set -euo pipefail
 
-# NOTE: this should be run as root if it needs access to system files
-
 # validate parameters
 if [ "$#" -ne 2 ]; then
     echo "error: wrong number of parameters"
@@ -15,52 +13,8 @@ if [ ! -f "$1" ]; then
     exit 1
 fi
 
-# validate input paths
-error=false
-echo "checking paths..."
-
-while IFS= read -r path; do
-    if [ "$path" != "" ] && [ ! -e "$path" ]; then
-        echo "error: path '$path' not found"
-        error=true
-    fi
-done < "$1"
-
-if [ $error = true ]; then
-    exit 1
-fi
-
-# read disk usage of paths
-concat=""
-
-# build a single string with literal quotation marks around
-# each path so du doesn't break if any paths have spaces
-while IFS= read -r path; do
-    if [ "$path" != "" ]; then
-        concat="$concat \"$path\""
-    fi
-done < "$1"
-
-echo "$concat" | xargs du -shc
-
-# ask the user if they want to continue
-echo "are you sure you want to back up the paths in '$1' to '$2'? (y/N)"
-
-while [ true ]; do
-    read continue
-
-    case $continue in
-        'n' | 'N' | '') exit 0 ;;
-        'y' | 'Y') break ;;
-        *) echo 'invalid input' ;;
-    esac
-done
-
-# create output directory if necessary
-if [ ! -d "$2" ]; then
-    mkdir "$2"
-fi
-
-# perform backup
-echo 'backup starting...'
-rsync -ravUh --delete-during --files-from="$1" / "$2"
+# borg can read paths from files via --paths-from-stdin, but it won't
+# recursively copy the contents of any directories this way. Instead,
+# read paths into an array and then expand them into positional arguments
+mapfile -t dirs < "$1"
+borg create --stats --progress --list --filter="CE?" --compression zstd "$2::backup_{now:%Y-%m-%d}" "${dirs[@]}"
