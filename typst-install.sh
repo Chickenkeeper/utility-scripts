@@ -1,8 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
-# NOTE: this needs to be run as root since it needs access to /opt
+# NOTE: this needs to be run as root since it needs access to /opt and /usr
 
+link_dir=/usr/local/bin
 typst_dir=/opt/typst
 typst_filename=typst-x86_64-unknown-linux-musl.tar.xz
 
@@ -20,3 +21,8 @@ cd $typst_dir
 wget "https://github.com/typst/typst/releases/latest/download/$typst_filename"
 tar -xf $typst_filename --strip-components 1
 rm $typst_filename
+
+# add a symlink to the binary in /usr/local/bin if one doesn't already exist
+if [ ! -f "$link_dir/typst" ]; then
+    ln -s "$typst_dir/typst" "$link_dir"
+fi
