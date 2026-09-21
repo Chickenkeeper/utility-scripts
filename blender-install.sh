@@ -5,6 +5,8 @@
 
 set -euo pipefail
 
+readonly INSTALL_DIR="${HOME}/.local/opt/blender"
+
 # validate parameters
 if (( $# -ne 1 )); then
     echo 'invalid parameters'
@@ -17,14 +19,12 @@ if [[ ! -f "$1" ]]; then
     exit 1
 fi
 
-install_dir="${HOME}/.local/opt/blender"
-
 # make the installation directory if it doesn't already exist
-if [[ ! -d "${install_dir}" ]]; then
-    mkdir -p "${install_dir}"
+if [[ ! -d "${INSTALL_DIR}" ]]; then
+    mkdir -p "${INSTALL_DIR}"
 fi
 
-cd "${install_dir}"
+cd "${INSTALL_DIR}"
 
 # if blender was already installed then unregister it
 if [[ -x "blender" ]]; then

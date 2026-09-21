@@ -6,6 +6,10 @@
 
 set -euo pipefail
 
+readonly LINK_DIR='/usr/local/bin'
+readonly INSTALL_DIR='/opt/odin'
+readonly CONFIG_DIR='/etc/environment.d'
+
 # validate parameters
 if (( $# -ne 1 )); then
     echo 'invalid parameters'
@@ -18,31 +22,27 @@ if [[ ! -f "$1" ]]; then
     exit 1
 fi
 
-link_dir='/usr/local/bin'
-install_dir='/opt/odin'
-config_dir='/etc/environment.d'
-
 # make the installation directory if it doesn't already exist
-if [[ ! -d "${install_dir}" ]]; then
-    mkdir "${install_dir}"
+if [[ ! -d "${INSTALL_DIR}" ]]; then
+    mkdir "${INSTALL_DIR}"
 fi
 
-cd "${install_dir}"
+cd "${INSTALL_DIR}"
 
 # remove any previous installation and install the new one
 rm -rf *
 tar -xf "$1" --strip-components 1
 
 # add a symlink to the binary in /usr/local/bin if one doesn't already exist
-if [[ ! -f "${link_dir}/odin" ]]; then
-    ln -s "${install_dir}/odin" "${link_dir}"
+if [[ ! -f "${LINK_DIR}/odin" ]]; then
+    ln -s "${INSTALL_DIR}/odin" "${LINK_DIR}"
 fi
 
 # add an environment config if one doesn't already exist
-if [[ ! -f "${config_dir}/odin.conf" ]]; then
-    if [[ ! -d "${config_dir}" ]]; then
-        mkdir "${config_dir}"
+if [[ ! -f "${CONFIG_DIR}/odin.conf" ]]; then
+    if [[ ! -d "${CONFIG_DIR}" ]]; then
+        mkdir "${CONFIG_DIR}"
     fi
 
-    echo "ODIN_ROOT=${install_dir}" > "${config_dir}/odin.conf"
+    echo "ODIN_ROOT=${INSTALL_DIR}" > "${CONFIG_DIR}/odin.conf"
 fi

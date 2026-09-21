@@ -1,8 +1,8 @@
 #!/bin/bash
 #
 # Assists with installing DaVinci Resolve.
-# NOTE: Needs to be run as root since it needs access to /opt
-# also make sure libxcrypt-compat is installed
+# NOTE: Needs to be run as root since it needs access
+# to /opt, and make sure libxcrypt-compat is installed.
 
 set -euo pipefail
 

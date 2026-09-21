@@ -6,24 +6,24 @@
 
 set -euo pipefail
 
-link_dir='/usr/local/bin'
-install_dir='/opt/tinymist'
-filename='tinymist-x86_64-unknown-linux-musl'
+readonly LINK_DIR='/usr/local/bin'
+readonly INSTALL_DIR='/opt/tinymist'
+readonly FILENAME='tinymist-x86_64-unknown-linux-musl'
 
 # make the installation directory if it doesn't already exist
-if [[ -d "${install_dir}" ]]; then
-    mkdir "${install_dir}"
+if [[ -d "${INSTALL_DIR}" ]]; then
+    mkdir "${INSTALL_DIR}"
 fi
 
-cd "${install_dir}"
+cd "${INSTALL_DIR}"
 
 # remove any previous installation, then download and install the new one
 rm -rf *
-wget "https://github.com/Myriad-Dreamin/tinymist/releases/latest/download/${filename}.tar.gz"
-tar -xf "${filename}.tar.gz" --strip-components 1
-rm "${filename}.tar.gz"
+wget "https://github.com/Myriad-Dreamin/tinymist/releases/latest/download/${FILENAME}.tar.gz"
+tar -xf "${FILENAME}.tar.gz" --strip-components 1
+rm "${FILENAME}.tar.gz"
 
 # add a symlink to the binary in /usr/local/bin if one doesn't already exist
-if [[ ! -f "${link_dir}/tinymist" ]]; then
-    ln -s "${install_dir}/tinymist" "${link_dir}"
+if [[ ! -f "${LINK_DIR}/tinymist" ]]; then
+    ln -s "${INSTALL_DIR}/tinymist" "${LINK_DIR}"
 fi
