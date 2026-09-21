@@ -1,5 +1,15 @@
 #!/bin/bash
+#
+# Performs a virus scan across the whole system using clamscan.
+# NOTE: Needs to be run as root to have access to the whole system.
 
-# NOTE: this needs to be run as root, otherwise it will generate a lot of 'permission denied' errors
+set -euo pipefail
 
-freshclam && clamscan -ir --log="$HOME/.clamlog" --exclude-dir="^/dev/" --exclude-dir="^/proc/" --exclude-dir="^/sys/" --exclude-dir="/\.snapshots/.*/snapshot/" /
+freshclam
+clamscan                                      \
+	-ir --log="$HOME/.clamlog"                \
+	--exclude-dir="^/dev/"                    \
+	--exclude-dir="^/proc/"                   \
+	--exclude-dir="^/sys/"                    \
+	--exclude-dir="/\.snapshots/.*/snapshot/" \
+	/

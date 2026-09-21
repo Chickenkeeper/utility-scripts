@@ -1,27 +1,37 @@
 #!/bin/bash
+#
+# Locally installs Blender from a specified
+# Blender tar, replacing any previous installation.
+
 set -euo pipefail
 
-if [ "$#" -ne 1 ]; then
-    echo "error: missing source tar"
-    echo "usage: ./blender-update.sh [SRC]"
+# validate parameters
+if (( $# -ne 1 )); then
+    echo 'invalid parameters'
+    echo 'usage: ./blender-update.sh [SRC]'
     exit 1
 fi
 
-if [ ! -f "$1" ]; then
-    echo "error: couldn't find source tar"
+if [[ ! -f "$1" ]]; then
+    echo 'no source file found'
     exit 1
 fi
 
-blender_dir=$HOME/.local/opt/blender
+install_dir="${HOME}/.local/opt/blender"
 
-# if the target directory exists then unregister blender and
-# delete everything in the directory, otherwise create the directory
-if [ -d "$blender_dir" ]; then
-    $blender_dir/blender --unregister
-    rm -rf $blender_dir/*
-else
-    mkdir -p $blender_dir
+# make the installation directory if it doesn't already exist
+if [[ ! -d "${install_dir}" ]]; then
+    mkdir -p "${install_dir}"
 fi
 
-tar -xf "$1" -C "$blender_dir" --strip-components 1
-$blender_dir/blender --register
+cd "${install_dir}"
+
+# if blender was already installed then unregister it
+if [[ -x "blender" ]]; then
+    ./blender --unregister
+]
+
+# remove any previous installation and install the new one
+rm -rf *
+tar -xf "$1" --strip-components 1
+./blender --register

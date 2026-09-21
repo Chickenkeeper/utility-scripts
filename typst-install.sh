@@ -1,28 +1,28 @@
 #!/bin/bash
+#
+# Downloads and globally installs Typst, replacing any previous installation.
+# NOTE: Needs to be run as root since it needs access to /opt and /usr.
+
 set -euo pipefail
 
-# NOTE: this needs to be run as root since it needs access to /opt and /usr
+link_dir='/usr/local/bin'
+install_dir='/opt/typst'
+filename='typst-x86_64-unknown-linux-musl'
 
-link_dir=/usr/local/bin
-typst_dir=/opt/typst
-typst_filename=typst-x86_64-unknown-linux-musl.tar.xz
-
-# if the target directory exists then delete
-# everything in it, otherwise create the directory
-if [ -d "$typst_dir" ]; then
-    rm -rf $typst_dir/*
-else
-    mkdir $typst_dir
+# make the installation directory if it doesn't already exist
+if [[ -d "${install_dir}" ]]; then
+    mkdir "${install_dir}"
 fi
 
-cd $typst_dir
+cd "${install_dir}"
 
-# download and unzip typst
-wget "https://github.com/typst/typst/releases/latest/download/$typst_filename"
-tar -xf $typst_filename --strip-components 1
-rm $typst_filename
+# remove any previous installation, then download and install the new one
+rm -rf *
+wget "https://github.com/typst/typst/releases/latest/download/${filename}.tar.gz"
+tar -xf "${filename}.tar.gz" --strip-components 1
+rm "${filename}.tar.gz"
 
 # add a symlink to the binary in /usr/local/bin if one doesn't already exist
-if [ ! -f "$link_dir/typst" ]; then
-    ln -s "$typst_dir/typst" "$link_dir"
+if [[ ! -f "${link_dir}/typst" ]]; then
+    ln -s "${install_dir}/typst" "${link_dir}"
 fi

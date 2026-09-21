@@ -1,3 +1,5 @@
 #!/bin/bash
+#
+# Clears the thumbnail cache of a system running KDE Plasma.
 
-rm -rf ~/.cache/thumbnails/*
+rm -rf "$HOME/.cache/thumbnails/"*

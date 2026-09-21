@@ -1,19 +1,27 @@
 #!/bin/bash
-set -euo pipefail
-
-# NOTE: this needs to be run as root since it needs access to /opt
+#
+# Assists with installing DaVinci Resolve.
+# NOTE: Needs to be run as root since it needs access to /opt
 # also make sure libxcrypt-compat is installed
 
-if [ "$#" -ne 1 ]; then
-    echo "error: missing run file"
-    echo "usage: ./davinci-resolve-install.sh [SRC]"
+set -euo pipefail
+
+# validate parameters
+if (( $# -ne 1 )); then
+    echo 'invalid parameters'
+    echo 'usage: ./davinci-resolve-install.sh [SRC]'
     exit 1
 fi
 
-if [ ! -f "$1" ]; then
-    echo "error: couldn't find run file"
+if [[ ! -f "$1" ]]; then
+    echo 'no source file found'
     exit 1
 fi
 
+# run the installer and clean up broken libraries
 SKIP_PACKAGE_CHECK=1 "$1" -i
-rm /opt/resolve/libs/libglib-* /opt/resolve/libs/libgio-* /opt/resolve/libs/libgmodule-* /opt/resolve/libs/libgobject-*
+rm                                   \
+    '/opt/resolve/libs/libgio-'*     \
+    '/opt/resolve/libs/libglib-'*    \
+    '/opt/resolve/libs/libgmodule-'* \
+    '/opt/resolve/libs/libgobject-'*
