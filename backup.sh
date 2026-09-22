@@ -72,5 +72,5 @@ borg create               \
     --stats --progress    \
     --list --filter="CE?" \
     --compression zstd    \
-    "${DEST_REPO}::backup_{now:%Y-%m-%d}" "${dirs[@]}"
+    "${DEST_REPO}::backup_{utcnow:%Y%m%dT%H%M%S}Z" "${dirs[@]}"
 echo 'Success'
