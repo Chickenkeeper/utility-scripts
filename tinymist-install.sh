@@ -17,13 +17,26 @@ fi
 
 cd "${INSTALL_DIR}"
 
-# remove any previous installation, then download and install the new one
-rm -rf *
+# remove any existing installation
+if [[ -x 'tinymist' ]]; then
+	echo 'Removing previous installation...'
+	rm -rf *
+fi
+
+# download and install tinymist
+echo 'Downloading latest version to temporary archive...'
 wget "https://github.com/Myriad-Dreamin/tinymist/releases/latest/download/${FILENAME}.tar.gz"
+echo 'Installing tinymist...'
 tar -xf "${FILENAME}.tar.gz" --strip-components 1
+echo 'Removing temporary archive...'
 rm "${FILENAME}.tar.gz"
 
 # add a symlink to the binary in /usr/local/bin if one doesn't already exist
 if [[ ! -f "${LINK_DIR}/tinymist" ]]; then
+	echo "Symlinking binary to ${LINK_DIR}..."
     ln -s "${INSTALL_DIR}/tinymist" "${LINK_DIR}"
+else
+	echo "Symlink already found in ${LINK_DIR}, skipping..."
 fi
+
+echo 'Success'
