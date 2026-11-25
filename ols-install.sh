@@ -1,14 +1,13 @@
 #!/bin/bash
 #
-# Downloads and globally installs the Odin Language
+# Downloads and locally installs the Odin Language
 # Server, replacing any previous installation.
-# NOTE: Needs to be run as root since it needs access to /opt, /usr and /etc.
 
 set -euo pipefail
 
-readonly LINK_DIR='/usr/local/bin'
-readonly INSTALL_DIR='/opt/ols'
-readonly CONFIG_DIR='/etc/environment.d'
+readonly LINK_DIR='${HOME}/.local/bin'
+readonly INSTALL_DIR='${HOME}/.local/opt/ols'
+readonly CONFIG_DIR='${HOME}/.config/environment.d'
 readonly OLS_FILENAME='ols-x86_64-unknown-linux-gnu'
 readonly ODINFMT_FILENAME='odinfmt-x86_64-unknown-linux-gnu'
 
@@ -39,7 +38,7 @@ echo 'Shortening executable names...'
 mv "${OLS_FILENAME}" 'ols'
 mv "${ODINFMT_FILENAME}" 'odinfmt'
 
-# add symlinks to the binaries in /usr/local/bin if either don't already exist
+# add symlinks to the binaries if either don't already exist
 if [[ ! -f "${LINK_DIR}/ols" ]]; then
 	echo "Symlinking ols binary to ${LINK_DIR}..."
     ln -s "${INSTALL_DIR}/ols" "${LINK_DIR}"

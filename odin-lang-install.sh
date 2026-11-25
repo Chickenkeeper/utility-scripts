@@ -1,19 +1,17 @@
 #!/bin/bash
 #
-# Globally installs the Odin programming language from a
+# Locally installs the Odin programming language from a
 # specified Odin tar, replacing any previous installation.
-# NOTE: Needs to be run as root since it needs access to /opt, /usr and /etc.
 
 set -euo pipefail
 
-readonly LINK_DIR='/usr/local/bin'
-readonly INSTALL_DIR='/opt/odin'
+readonly LINK_DIR='${HOME}/.local/bin'
+readonly INSTALL_DIR='${HOME}/.local/opt/odin'
 
 show_help() {
     cat << END
-Globally installs the Odin programming language from a
+Locally installs the Odin programming language from a
 specified Odin tar (SRC), replacing any previous installation.
-NOTE: Needs to be run as root since it needs access to /opt, /usr and /etc.
 
 Usages:
     ${0##*/} [SRC]
@@ -80,7 +78,7 @@ fi
 echo 'Installing odin...'
 tar -xf "${SRC_FILE}" --strip-components 1
 
-# add a symlink to the binary in /usr/local/bin if one doesn't already exist
+# add a symlink to the binary if one doesn't already exist
 if [[ ! -f "${LINK_DIR}/odin" ]]; then
 	echo "Symlinking binary to ${LINK_DIR}..."
     ln -s "${INSTALL_DIR}/odin" "${LINK_DIR}"
