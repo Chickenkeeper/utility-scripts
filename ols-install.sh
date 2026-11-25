@@ -7,7 +7,6 @@ set -euo pipefail
 
 readonly LINK_DIR='${HOME}/.local/bin'
 readonly INSTALL_DIR='${HOME}/.local/opt/ols'
-readonly CONFIG_DIR='${HOME}/.config/environment.d'
 readonly OLS_FILENAME='ols-x86_64-unknown-linux-gnu'
 readonly ODINFMT_FILENAME='odinfmt-x86_64-unknown-linux-gnu'
 
@@ -51,19 +50,6 @@ if [[ ! -f "${LINK_DIR}/odinfmt" ]]; then
     ln -s "${INSTALL_DIR}/odinfmt" "${LINK_DIR}"
 else
 	echo "Odinfmt symlink already found in ${LINK_DIR}, skipping..."
-fi
-
-# add an environment config if one doesn't already exist
-if [[ ! -f "${CONFIG_DIR}/ols.conf" ]]; then
-	echo "Adding environment config to ${CONFIG_DIR}..."
-
-    if [[ ! -d "${CONFIG_DIR}" ]]; then
-        mkdir "${CONFIG_DIR}"
-    fi
-
-    echo "OLS_BUILTIN_FOLDER=${INSTALL_DIR}" > "${CONFIG_DIR}/ols.conf"
-else
-	echo "Environment config already found in ${CONFIG_DIR}, skipping..."
 fi
 
 echo 'Success'
