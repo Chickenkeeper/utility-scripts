@@ -8,7 +8,6 @@ set -euo pipefail
 
 readonly LINK_DIR='/usr/local/bin'
 readonly INSTALL_DIR='/opt/odin'
-readonly CONFIG_DIR='/etc/environment.d'
 
 show_help() {
     cat << END
@@ -87,19 +86,6 @@ if [[ ! -f "${LINK_DIR}/odin" ]]; then
     ln -s "${INSTALL_DIR}/odin" "${LINK_DIR}"
 else
 	echo "Symlink already found in ${LINK_DIR}, skipping..."
-fi
-
-# add an environment config if one doesn't already exist
-if [[ ! -f "${CONFIG_DIR}/odin.conf" ]]; then
-	echo "Adding environment config to ${CONFIG_DIR}..."
-
-    if [[ ! -d "${CONFIG_DIR}" ]]; then
-        mkdir "${CONFIG_DIR}"
-    fi
-
-    echo "ODIN_ROOT=${INSTALL_DIR}" > "${CONFIG_DIR}/odin.conf"
-else
-	echo "Environment config already found in ${CONFIG_DIR}, skipping..."
 fi
 
 echo 'Success'
